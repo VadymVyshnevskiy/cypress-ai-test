@@ -1,9 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy Next.js Static Export to GitHub Pages
 
 on:
   push:
     branches:
-      - main # or 'master' depending on your repo
+      - main # adjust if your main branch has a different name
 
 permissions:
   contents: write
@@ -15,10 +15,10 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      - name: Set up Node
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
@@ -26,13 +26,16 @@ jobs:
       - name: Install dependencies
         run: npm install
 
-      - name: Build project
+      - name: Build Next.js project
         run: npm run build
 
-      - name: Upload build artifact
+      - name: Export static site
+        run: npm run export
+
+      - name: Upload GitHub Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: ./build # IMPORTANT: for React, Vite, etc.
+          path: ./out
 
   deploy:
     needs: build
