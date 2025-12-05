@@ -11,3 +11,14 @@ describe("template spec", () => {
     cy.contains("Dashboard").should("exist");
   });
 });
+
+it('AITest', function() {
+  cy.prompt([
+    "visit https://vadymvyshnevskiy.github.io/cypress-ai-test/",
+    "enter user name with value 'user'",
+    "enter password 'pass'",
+    "click button 'Sign in'",
+    "check that 'Dashboard' header appear and visible"
+  ])
+  
+});
