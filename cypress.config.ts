@@ -7,5 +7,9 @@ export default defineConfig({
     video: false,
     screenshotOnRunFailure: false,
     experimentalPromptCommand: true,
+    retries: {
+      runMode: 2,
+      openMode: 0,
+    },
   },
 });
