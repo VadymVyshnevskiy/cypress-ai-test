@@ -22,11 +22,37 @@ export default function Dashboard() {
   });
   const [form2, setForm2] = useState<Form2Type>({ email: "", phone: "" });
   const [msg, setMsg] = useState<string>("");
+  const [isModal1Open, setIsModal1Open] = useState<boolean>(false);
+  const [isModal2Open, setIsModal2Open] = useState<boolean>(false);
 
   const handleLogout = () => {
     sessionStorage.removeItem("authenticated");
     router.push("/");
   };
+
+  const openModal1 = () => setIsModal1Open(true);
+  const closeModal1 = () => setIsModal1Open(false);
+  const openModal2 = () => setIsModal2Open(true);
+  const closeModal2 = () => setIsModal2Open(false);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        if (isModal1Open) closeModal1();
+        if (isModal2Open) closeModal2();
+      }
+    };
+
+    if (isModal1Open || isModal2Open) {
+      document.addEventListener("keydown", handleEscape);
+      document.body.style.overflow = "hidden";
+    }
+
+    return () => {
+      document.removeEventListener("keydown", handleEscape);
+      document.body.style.overflow = "unset";
+    };
+  }, [isModal1Open, isModal2Open]);
 
   const handleChangeForm1 = (e: ChangeEvent<HTMLInputElement>) =>
     setForm1((prev) => ({ ...prev, [e.target.name]: e.target.value }));
@@ -60,13 +86,13 @@ export default function Dashboard() {
             </div>
             <div className="flex flex-wrap gap-3">
               <button
-                onClick={() => alert("Button 1 clicked")}
+                onClick={openModal1}
                 className="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95"
               >
                 Button 1
               </button>
               <button
-                onClick={() => alert("Button 2 clicked")}
+                onClick={openModal2}
                 className="px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white font-medium rounded-lg shadow-md hover:shadow-lg transition-all duration-200 transform hover:scale-105 active:scale-95"
               >
                 Button 2
@@ -195,6 +221,121 @@ export default function Dashboard() {
           </div>
         )}
       </div>
+
+      {/* Modal 1 */}
+      {isModal1Open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 backdrop-blur-sm transition-opacity"
+          onClick={closeModal1}
+        >
+          <div
+            className="bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-zinc-200 dark:border-zinc-700 transform transition-all animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                  Button 1 Action
+                </h3>
+                <button
+                  onClick={closeModal1}
+                  className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                  aria-label="Close modal"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                Button 1 clicked! This is a custom modal with a modern design.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={closeModal1}
+                  className="px-4 py-2 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={closeModal1}
+                  className="px-4 py-2 bg-blue-600 hover:bg-blue-700 dark:bg-blue-500 dark:hover:bg-blue-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Modal 2 */}
+      {isModal2Open && (
+        <div
+          className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 dark:bg-black/70 backdrop-blur-sm transition-opacity"
+          onClick={closeModal2}
+        >
+          <div
+            className="bg-white dark:bg-zinc-800 rounded-2xl shadow-2xl max-w-md w-full mx-4 border border-zinc-200 dark:border-zinc-700 transform transition-all animate-in fade-in zoom-in-95 duration-200"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <div className="p-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-xl font-semibold text-zinc-900 dark:text-zinc-50">
+                  Button 2 Action
+                </h3>
+                <button
+                  onClick={closeModal2}
+                  className="text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-200 transition-colors p-1 rounded-lg hover:bg-zinc-100 dark:hover:bg-zinc-700"
+                  aria-label="Close modal"
+                >
+                  <svg
+                    className="w-6 h-6"
+                    fill="none"
+                    stroke="currentColor"
+                    viewBox="0 0 24 24"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M6 18L18 6M6 6l12 12"
+                    />
+                  </svg>
+                </button>
+              </div>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-6">
+                Button 2 clicked! This is another custom modal with a modern
+                design.
+              </p>
+              <div className="flex justify-end gap-3">
+                <button
+                  onClick={closeModal2}
+                  className="px-4 py-2 text-zinc-700 dark:text-zinc-300 hover:bg-zinc-100 dark:hover:bg-zinc-700 rounded-lg font-medium transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={closeModal2}
+                  className="px-4 py-2 bg-green-600 hover:bg-green-700 dark:bg-green-500 dark:hover:bg-green-600 text-white rounded-lg font-medium transition-colors"
+                >
+                  Confirm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }
